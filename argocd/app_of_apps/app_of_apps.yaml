@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/jolillie/technical_demo.git
     targetRevision: argocd_deployment
-    path: argocd/app_of_apps
+    path: argocd/app_of_apps/*
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
