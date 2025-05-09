@@ -1,0 +1,100 @@
+---
+- name: Setup Database VM with MongoDB 4.4
+  hosts: db_servers
+  gather_facts: true
+  become: true
+  vars:
+    mongodb_version: "4.4"
+    mongodb_admin_user: admin
+    mongodb_admin_password: your_secure_password
+  tasks:
+
+    - name: Add MongoDB GPG key (v4.4)
+      ansible.builtin.apt_key:
+        url: https://pgp.mongodb.com/server-4.4.asc
+        state: present
+
+    - name: Add MongoDB APT repository (v4.4)
+      ansible.builtin.apt_repository:
+        repo: "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse"
+        state: present
+        filename: "mongodb-org-4.4"
+
+    - name: Update APT cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install specific MongoDB 4.4 version
+      ansible.builtin.apt:
+        name:
+          - mongodb-org=4.4.26
+          - mongodb-org-server=4.4.26
+          - mongodb-org-shell=4.4.26
+          - mongodb-org-mongos=4.4.26
+          - mongodb-org-tools=4.4.26
+        state: present
+
+    - name: Pin MongoDB packages to prevent unintended upgrade
+      ansible.builtin.dpkg_selections:
+        name: mongodb-org
+        selection: hold
+
+    - name: Enable and start MongoDB service
+      ansible.builtin.systemd:
+        name: mongod
+        enabled: true
+        state: started
+
+    - name: Wait for MongoDB to be available
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: 27017
+        delay: 5
+        timeout: 30
+
+    - name: Ensure pip3 is installed
+      ansible.builtin.apt:
+        name: python3-pip
+        state: present
+
+    - name: Install pymongo (required for Ansible MongoDB modules)
+      ansible.builtin.pip:
+        name: pymongo
+        executable: pip3
+
+    - name: Create admin MongoDB user (before enabling auth)
+      community.mongodb.mongodb_user:
+        login_host: localhost
+        login_port: 27017
+        name: "{{ mongodb_admin_user }}"
+        password: "{{ mongodb_admin_password }}"
+        roles:
+          - role: root
+            db: admin
+        database: admin
+        state: present
+
+    - name: Enable MongoDB authentication
+      ansible.builtin.blockinfile:
+        path: /etc/mongod.conf
+        block: |
+          security:
+            authorization: "enabled"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - AUTH"
+
+    - name: Restart MongoDB to apply authentication config
+      ansible.builtin.systemd:
+        name: mongod
+        state: restarted
+
+    - name: Test MongoDB authentication using admin user
+      community.mongodb.mongodb_info:
+        login_user: "{{ mongodb_admin_user }}"
+        login_password: "{{ mongodb_admin_password }}"
+        login_database: admin
+      register: mongo_info
+
+    - name: Show MongoDB server info (authentication succeeded)
+      ansible.builtin.debug:
+        var: mongo_info

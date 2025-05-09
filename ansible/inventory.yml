@@ -1,0 +1,8 @@
+all:
+  children:
+    db_servers:
+      hosts:
+        db_server01:
+          ansible_host: 172.16.1.8
+          ansible_user: jon
+          ansible_python_interpreter: /usr/bin/python3.6

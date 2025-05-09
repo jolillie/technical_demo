@@ -1,3 +1,6 @@
+.vscode
+.ansible
+**/ansible/collections/*
 .DS_Store
 .op
 .op/*
