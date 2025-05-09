@@ -1,2 +1,2 @@
 resources:
-  - tetris/application.yaml
+  - tetris/tetris_deployment.yaml
