@@ -53,14 +53,14 @@ resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
 # === Security Group for EKS ===
 resource "aws_security_group" "eks_sg" {
   name   = "eks-sg"
-  vpc_id = data.terraform_remote_state.base.outputs.vpc_id
+  vpc_id = aws_vpc.main.id
 
   ingress {
     description = "Allow all traffic from within VPC"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [data.terraform_remote_state.base.outputs.vpc_id]
+    cidr_blocks = [aws_vpc.main.id]
   }
 
   egress {
@@ -78,8 +78,8 @@ resource "aws_eks_cluster" "main" {
 
   vpc_config {
     subnet_ids = [
-      data.terraform_remote_state.base.outputs.public_subnet_id,
-      data.terraform_remote_state.base.outputs.private_subnet_id
+      aws_subnet.public.id,
+      aws_subnet.private.id,
     ]
     security_group_ids = [aws_security_group.eks_sg.id]
   }
@@ -95,8 +95,8 @@ resource "aws_eks_node_group" "default" {
   node_group_name = "default-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids = [
-    data.terraform_remote_state.base.outputs.public_subnet_id,
-    data.terraform_remote_state.base.outputs.private_subnet_id
+    aws_subnet.public.id,
+    aws_subnet.private.id,
   ]
 
   scaling_config {
