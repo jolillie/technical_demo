@@ -40,3 +40,65 @@ Terraform CLI vs Version control for running TF applies
 ## Mongo Server Setup
 
 1. Update
+
+## Todo List
+
+- [ ] Kubernetes Application Exercise
+  - [ ] Database
+    - [ ] Outdated Linux VM
+    - [ ] On top of VM, installed outdated DB Server
+    - [ ] Configure VM to allow SSH connections from internet
+    - [ ] Configure DB and/or network to only allow connections to the DB from Apps in K8s Cluster
+  - [ ] Database Authentication
+    - [ ] Ensure DB is configed for local auth
+    - [ ] Ability to construct connection string
+  - [ ] Highly Privileged DB VM
+    - [ ] Config VM in a way that it is granted overly permissive CSP permissions
+  - [ ] Object Storage
+    - [ ] Create a cloud object storage resource
+    - [ ] Store DB Backups
+    - [ ] Modify permissions on object store to allow public read access to the backups
+    - [ ] Modify permissions on object store to allow public listing of contents
+    - [ ] Validate backups are accessible via external URL
+  - [ ] DB Backups
+    - [ ] Create automation to regularly backup db(s) to the created bucket / object store
+  - [ ] Kubernetes Cluster
+    - [ ] Deploy K8s cluster
+  - [ ] Containerized Web Application
+    - [ ] Deploy containerized web app onto K8s cluster
+    - [ ] Ensure container employs DB auth
+    - [ ] Confirm container image includes a file named "wizexercise.txt" with content
+  - [ ] Public Access
+    - [ ] Set up the containerized web app to be reachable from the public internet
+  - [ ] Container Admin Configuration
+    - [ ] configure the web app container to run with cluster-admin privileges
+- [ ] DevOps Exercise
+  - [ ] VCS/SCM
+    - [ ] Push code to VCS/SCM
+  - [ ] CI Pipeline
+    - [ ] Setup two CI Pipelines
+      - [ ] Deploy to cloud via IaC
+      - [ ] Build and push container app to container repo
+- [ ] Cloud Detection and Response Exercise
+  - [ ] Technical Security Controls
+    - [ ] Have technical security controls in place before your application is in prod
+    - [ ] Could be any number of things
+      - [ ] compliance
+      - [ ] audit
+      - [ ] security
+    - [ ] Security controls may be
+      - [ ] Preventative
+      - [ ] Detective
+      - [ ] Responsive
+  - [ ] Control Plane Audit Logging
+    - [ ] Setup control plane audit logging for AWS
+    - [ ] Show a sample event of the activity produced during the tech tasks
+  - [ ] Optional: Setup Cloud Native detective controls for your CSP
+  - [ ] Optional: Run a simulated attack or simulated behavior to showcase the efficacy of your preventative and detective controls
+- [ ] Demo and Presentation
+- [ ] Extra Credit
+  - [ ] Additions that demo technical skills
+  - [ ] Efficient, Repeatable, approaches to buildout
+  - [ ] Documented Painpoints
+  - [ ] Clear and intuitive
+
