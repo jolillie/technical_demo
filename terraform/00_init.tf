@@ -32,3 +32,8 @@ variable "root_volume_size" {
   type        = number
   default     = 20
 }
+
+variable "bucket_name_prefix" {
+  description = "Prefix for the S3 bucket name (a random suffix will be added)"
+  type        = string
+}

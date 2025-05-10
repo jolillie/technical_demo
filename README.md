@@ -20,7 +20,7 @@ Jon Lillie
 
 ## Notes
 
-Older AMI image lookup: https://cloud-images.ubuntu.com/locator/ec2/
+Older AMI image lookup: [Ubuntu AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/)
 
 ```bash
 docker build -t ansible-apt:2.10 .
@@ -45,15 +45,15 @@ Terraform CLI vs Version control for running TF applies
 
 - [ ] Kubernetes Application Exercise
   - [ ] Database
-    - [ ] Outdated Linux VM
-    - [ ] On top of VM, installed outdated DB Server
-    - [ ] Configure VM to allow SSH connections from internet
+    - [x] Outdated Linux VM (Ubuntu 18.04)
+    - [x] On top of VM, installed outdated DB Server (MongoDB 4.4)
+    - [x] Configure VM to allow SSH connections from internet
     - [ ] Configure DB and/or network to only allow connections to the DB from Apps in K8s Cluster
   - [ ] Database Authentication
-    - [ ] Ensure DB is configed for local auth
-    - [ ] Ability to construct connection string
+    - [X] Ensure DB is configured for local auth
+    - [x] Ability to construct connection string
   - [ ] Highly Privileged DB VM
-    - [ ] Config VM in a way that it is granted overly permissive CSP permissions
+    - [x] Config VM in a way that it is granted overly permissive CSP permissions
   - [ ] Object Storage
     - [ ] Create a cloud object storage resource
     - [ ] Store DB Backups
@@ -73,8 +73,8 @@ Terraform CLI vs Version control for running TF applies
   - [ ] Container Admin Configuration
     - [ ] configure the web app container to run with cluster-admin privileges
 - [ ] DevOps Exercise
-  - [ ] VCS/SCM
-    - [ ] Push code to VCS/SCM
+  - [X] VCS/SCM
+    - [X] Push code to VCS/SCM
   - [ ] CI Pipeline
     - [ ] Setup two CI Pipelines
       - [ ] Deploy to cloud via IaC
@@ -98,7 +98,6 @@ Terraform CLI vs Version control for running TF applies
 - [ ] Demo and Presentation
 - [ ] Extra Credit
   - [ ] Additions that demo technical skills
-  - [ ] Efficient, Repeatable, approaches to buildout
-  - [ ] Documented Painpoints
+  - [ ] Efficient, Repeatable, approaches to build out
+  - [ ] Documented Pain points
   - [ ] Clear and intuitive
-
