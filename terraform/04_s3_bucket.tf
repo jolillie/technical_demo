@@ -33,7 +33,7 @@ resource "aws_s3_bucket_policy" "public_read_list" {
         Sid       = "PublicReadGetObject",
         Effect    = "Allow",
         Principal = "*",
-        Action    = [
+        Action = [
           "s3:GetObject",
           "s3:ListBucket"
         ],
