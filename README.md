@@ -57,8 +57,8 @@ Terraform CLI vs Version control for running TF applies
   - [ ] Object Storage
     - [ ] Create a cloud object storage resource
     - [ ] Store DB Backups
-    - [ ] Modify permissions on object store to allow public read access to the backups
-    - [ ] Modify permissions on object store to allow public listing of contents
+    - [x] Modify permissions on object store to allow public read access to the backups
+    - [x] Modify permissions on object store to allow public listing of contents
     - [ ] Validate backups are accessible via external URL
   - [ ] DB Backups
     - [ ] Create automation to regularly backup db(s) to the created bucket / object store
