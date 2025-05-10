@@ -35,6 +35,7 @@ docker run -it --rm -v $PWD:/ansible -v ~/.ssh:/root/.ssh ansible-apt:2.10
 Finding an older ubuntu AMI was a challenge
 Finding the right combination of Ubuntu Version and MongoDB
 Needed an older version of ansible to work with the older versions of Ubuntu
+Terraform CLI vs Version control for running TF applies
 
 ## Mongo Server Setup
 
