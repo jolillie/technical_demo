@@ -77,7 +77,7 @@ Terraform CLI vs Version control for running TF applies
     - [X] Push code to VCS/SCM
   - [ ] CI Pipeline
     - [ ] Setup two CI Pipelines
-      - [ ] Deploy to cloud via IaC
+      - [x] Deploy to cloud via IaC
       - [ ] Build and push container app to container repo
 - [ ] Cloud Detection and Response Exercise
   - [ ] Technical Security Controls
