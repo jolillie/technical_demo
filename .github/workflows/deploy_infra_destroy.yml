@@ -1,0 +1,34 @@
+name: Destroy Deployed Infrastructure
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Run Terraform
+    runs-on: ubuntu-latest
+
+    env:
+      TFC_TOKEN: ${{ secrets.TFC_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+          cli_config_credentials_token: ${{ secrets.TFC_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Validate
+        run: terraform destroy -no-color -input=false -auto-approve
+        working-directory: ./terraform
