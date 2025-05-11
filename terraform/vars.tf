@@ -1,16 +1,3 @@
-terraform {
-  cloud {
-    organization = "jtl-tfc-org"
-    workspaces {
-      name = "wiz-tech-presentation"
-    }
-  }
-}
-
-provider "aws" {
-  region = "us-east-1"
-}
-
 # === Variables ===
 variable "ubuntu_ami" {
   description = "AMI ID for Ubuntu"
