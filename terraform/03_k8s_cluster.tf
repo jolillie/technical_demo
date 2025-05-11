@@ -1,9 +1,12 @@
+# === Get Available AZs ===
+data "aws_availability_zones" "available" {}
+
 # === EKS IAM Role ===
 resource "aws_iam_role" "eks_cluster_role" {
   name = "eks-cluster-role"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [{
       Action = "sts:AssumeRole"
       Principal = {
@@ -24,7 +27,7 @@ resource "aws_iam_role" "eks_node_role" {
   name = "eks-node-role"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [{
       Action = "sts:AssumeRole"
       Principal = {
@@ -71,6 +74,21 @@ resource "aws_security_group" "eks_sg" {
   }
 }
 
+# === Subnets in 2 AZs for EKS ===
+resource "aws_subnet" "eks_subnet_a" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[0]
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "eks_subnet_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.4.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[1]
+  map_public_ip_on_launch = true
+}
+
 # === EKS Cluster ===
 resource "aws_eks_cluster" "main" {
   name     = "main-cluster"
@@ -78,8 +96,8 @@ resource "aws_eks_cluster" "main" {
 
   vpc_config {
     subnet_ids = [
-      aws_subnet.public.id,
-      aws_subnet.private.id,
+      aws_subnet.eks_subnet_a.id,
+      aws_subnet.eks_subnet_b.id,
     ]
     security_group_ids = [aws_security_group.eks_sg.id]
   }
@@ -94,9 +112,10 @@ resource "aws_eks_node_group" "default" {
   cluster_name    = aws_eks_cluster.main.name
   node_group_name = "default-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
+
   subnet_ids = [
-    aws_subnet.public.id,
-    aws_subnet.private.id,
+    aws_subnet.eks_subnet_a.id,
+    aws_subnet.eks_subnet_b.id,
   ]
 
   scaling_config {
