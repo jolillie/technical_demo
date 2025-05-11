@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quote Collector</title>
+</head>
+<body>
+  <h1>Recent Quotes</h1>
+  <a href="/add">Add New Quote</a>
+  <ul>
+    {% for q in quotes %}
+      <li>
+        <blockquote>"{{ q.quote }}"</blockquote>
+        — {{ q.author }}
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
