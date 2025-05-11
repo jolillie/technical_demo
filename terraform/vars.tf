@@ -24,3 +24,8 @@ variable "bucket_name_prefix" {
   description = "Prefix for the S3 bucket name (a random suffix will be added)"
   type        = string
 }
+
+variable "eks_cluster_name" {
+  description = "EKS Cluster Name"
+  type        = string
+}

@@ -18,7 +18,7 @@ module "base" {
 module "ubuntu_vm" {
   source             = "./ubuntu_vm"
   vpc_id             = module.base.vpc_id
-  subnet_id          = module.base.public_subnet_id
+  subnet_id          = module.base.private_a_subnet_id
   key_name           = var.key_name
   ubuntu_ami         = var.ubuntu_ami
   instance_type      = var.instance_type
@@ -26,9 +26,10 @@ module "ubuntu_vm" {
   bucket_name_prefix = var.bucket_name_prefix
 }
 
-# module "k8s_cluster" {
-#   source  = "./k8s_cluster"
-#   vpc_id  = module.base.vpc_id
-#   public_subnet_id  = module.base.public_subnet_id
-#   private_subnet_id = module.base.private_subnet_id
-# }
+module "k8s_cluster" {
+  source  = "./k8s_cluster"
+  eks_cluster_name = var.eks_cluster_name
+  vpc_id           = module.base.vpc_id
+  private_a_subnet_id = module.base.private_a_subnet_id
+  private_b_subnet_id = module.base.private_b_subnet_id
+}
