@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/jolillie/technical_demo.git
-    targetRevision: master
+    targetRevision: main
     path: argocd/manifests/quote_collector_test
   destination:
     server: https://kubernetes.default.svc

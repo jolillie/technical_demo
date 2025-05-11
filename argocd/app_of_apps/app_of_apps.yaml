@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/jolillie/technical_demo.git
-    targetRevision: argocd_deployment
+    targetRevision: main
     path: argocd/app_of_apps
     kustomize: {}
   destination:
