@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quote-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quote-collector
+  template:
+    metadata:
+      labels:
+        app: quote-collector
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/jolillie/quote-collector:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URI
+              value: mongodb://your-mongo-host:27017/quotes

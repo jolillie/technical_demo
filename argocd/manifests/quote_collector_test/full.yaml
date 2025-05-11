@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quote-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: quote-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:6
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: quote-demo
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quote-collector
+  namespace: quote-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quote-collector
+  template:
+    metadata:
+      labels:
+        app: quote-collector
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/YOUR_USERNAME/quote-collector:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongodb:27017/quotes
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quote-collector
+  namespace: quote-demo
+spec:
+  selector:
+    app: quote-collector
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: ClusterIP

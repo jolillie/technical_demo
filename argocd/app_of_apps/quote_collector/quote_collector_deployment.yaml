@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quote-collector
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/jolillie/technical_demo.git
+    targetRevision: master
+    path: argocd/manifests/quote_collector_test
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: quote-collector
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
