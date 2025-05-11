@@ -74,13 +74,13 @@ Terraform Blast Radiuses and being able to blow up specific parts of the environ
     - [ ] Set up the containerized web app to be reachable from the public internet
   - [ ] Container Admin Configuration
     - [ ] configure the web app container to run with cluster-admin privileges
-- [ ] DevOps Exercise
+- [X] DevOps Exercise
   - [X] VCS/SCM
     - [X] Push code to VCS/SCM
-  - [ ] CI Pipeline
-    - [ ] Setup two CI Pipelines
+  - [X] CI Pipeline
+    - [X] Setup two CI Pipelines
       - [x] Deploy to cloud via IaC
-      - [ ] Build and push container app to container repo
+      - [x] Build and push container app to container repo
 - [ ] Cloud Detection and Response Exercise
   - [ ] Technical Security Controls
     - [ ] Have technical security controls in place before your application is in prod
