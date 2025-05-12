@@ -24,6 +24,8 @@ COPY requirements.yml /ansible/requirements.yml
 COPY ansible.cfg /ansible/ansible.cfg
 COPY inventory.yml /ansible/inventory.yml
 COPY setup_db_vm.yml /ansible/setup_db_vm.yml
+COPY add_backup_job.yml /ansible/add_backup_job.yml
+COPY scripts/ /ansible/scripts/
 RUN ansible-galaxy collection install -r requirements.yml --force
 
 CMD ["bash"]
