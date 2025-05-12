@@ -1,0 +1,35 @@
+---
+- name: Deploy MongoDB backup script
+  hosts: mongo_servers
+  become: yes
+  vars:
+    backup_script_path: /usr/local/bin/mongo_backup.sh
+    cron_job: "0 * * * * root /usr/local/bin/mongo_backup.sh"
+
+  tasks:
+    - name: Install required packages
+      package:
+        name:
+          - awscli
+          - mongodb-clients
+        state: present
+
+    - name: Upload the backup script
+      copy:
+        src: mongo_backup.sh
+        dest: "{{ backup_script_path }}"
+        mode: '0755'
+
+    - name: Ensure backup log directory exists
+      file:
+        path: /var/log
+        state: directory
+        mode: '0755'
+
+    - name: Set up cron job
+      cron:
+        name: "Hourly MongoDB backup"
+        minute: "0"
+        hour: "*"
+        user: root
+        job: "{{ backup_script_path }}"
