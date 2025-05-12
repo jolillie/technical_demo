@@ -61,12 +61,12 @@
         name: pymongo
         executable: pip3
 
-    - name: Create admin MongoDB user (before enabling auth)
+    - name: Create main MongoDB user (before enabling auth)
       community.mongodb.mongodb_user:
         login_host: localhost
         login_port: 27017
-        name: "{{ mongodb_admin_user }}"
-        password: "{{ mongodb_admin_password }}"
+        name: "{{ mongodb_main_user }}"
+        password: "{{ mongodb_main_password }}"
         roles:
           - role: root
             db: admin
