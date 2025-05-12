@@ -1,0 +1,36 @@
+name: Run Ansible with Custom Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ansible:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Build custom Ansible Docker image
+      run: |
+        docker build -t custom-ansible ansible/Dockerfile
+
+    - name: Run Ansible inside Docker container
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -v ~/.ssh:/root/.ssh:ro \
+          -w /workspace \
+          custom-ansible \
+          ansible-playbook -i "${{ secrets.EC2_HOST }}," ansible/setup_db_vm.yml \
+            --private-key /root/.ssh/id_rsa \
+            -u ubuntu
+            -e "mongodb_admin_password=${{ secrets.MONGODB_ADMIN_PASSWORD }}" \
+            -e "mongodb_admin_user=${{ secrets.MONGODB_ADMIN_USER }}" \
