@@ -11,15 +11,15 @@ provider "aws" {
   region = "us-east-1"
 }
 
-module "base" {
-  source           = "./base"
-  eks_cluster_name = var.eks_cluster_name
-}
+# module "base" {
+#   source           = "./base"
+#   eks_cluster_name = var.eks_cluster_name
+# }
 
 module "ubuntu_vm" {
   source             = "./ubuntu_vm"
-  vpc_id             = module.base.vpc_id
-  subnet_id          = module.base.private_a_subnet_id
+  vpc_id             = var.vpc_id
+  subnet_id          = var.subnet_id
   key_name           = var.key_name
   ubuntu_ami         = var.ubuntu_ami
   instance_type      = var.instance_type
