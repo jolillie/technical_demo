@@ -21,6 +21,7 @@ RUN pip install pymongo
 WORKDIR /ansible
 
 COPY requirements.yml /ansible/requirements.yml
-RUN ansible-galaxy install -r requirements.yml
+COPY ansible.cfg /ansible/ansible.cfg
+RUN ansible-galaxy collection install -r requirements.yml --force
 
 CMD ["bash"]
