@@ -1,3 +1,3 @@
 resources:
   - tetris/tetris_deployment.yaml
-  # - quote_collector/quote_collector_deployment.yaml
+  - quote_collector/quote_collector_deployment.yaml

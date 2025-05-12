@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/jolillie/technical_demo.git
     targetRevision: main
-    path: argocd/manifests/quote_collector_test
+    path: argocd/manifests/quote_collector
   destination:
     server: https://kubernetes.default.svc
     namespace: quote-collector

@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quote-demo
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: quote-collector
+  namespace: quote-demo
 spec:
   replicas: 1
   selector:
@@ -19,4 +25,7 @@ spec:
             - containerPort: 5000
           env:
             - name: MONGO_URI
-              value: mongodb://your-mongo-host:27017/quotes
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials
+                  key: MONGO_URI
