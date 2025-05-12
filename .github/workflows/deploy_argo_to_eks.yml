@@ -20,12 +20,11 @@ jobs:
 
     - name: Update kubeconfig
       run: |
-        aws eks update-kubeconfig --region $AWS_REGION --name demo_cluster
+        aws eks update-kubeconfig --region $AWS_REGION --name demo-cluster
 
     - name: Create ArgoCD Namespace
       run: |
-        kubectl create namespace argocd || true
-        kubectl label namespace argocd eks.amazonaws.com/fargate-profile=default --overwrite
+        kubectl create namespace argocd
 
     - name: Deploy ArgoCD
       run: |
