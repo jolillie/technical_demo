@@ -53,11 +53,11 @@ jobs:
 
     - name: Create Quote-Collector Namespace
       run: |
-        kubectl create namespace quote-demo || true
+        kubectl create namespace quote-collector || true
 
     - name: Create MongoDB Secret
       run: |
-        kubectl create secret generic mongo-credentials -n quote-demo \
+        kubectl create secret generic mongo-credentials -n quote-collector \
           --from-literal=MONGO_URI="${{ secrets.MONGO_URI }}" \
           --dry-run=client -o yaml | kubectl apply -f -
 
