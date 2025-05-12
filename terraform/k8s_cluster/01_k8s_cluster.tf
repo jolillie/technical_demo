@@ -19,53 +19,13 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_AmazonEKSClusterPolicy" {
   role       = aws_iam_role.eks_cluster_role.name
 }
 
-# Node group with EC2 workers
-resource "aws_eks_node_group" "main" {
-  cluster_name    = aws_eks_cluster.main.name
-  node_group_name = "demo-node-group"
-  node_role_arn   = aws_iam_role.eks_node_role.arn
-  subnet_ids      = [aws_subnet.private_a_subnet_id, aws_subnet.private_b_subnet_id]
-
-  scaling_config {
-    desired_size = 2
-    max_size     = 3
-    min_size     = 1
-  }
-
-  depends_on = [
-    aws_eks_cluster.main,
-    aws_iam_role_policy_attachment.eks_node_AmazonEKSWorkerNodePolicy,
-  ]
-}
-
-resource "aws_iam_role" "eks_node_role" {
-  name = "eksNodeRole"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-      Effect = "Allow"
-      Sid    = ""
-    }]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "eks_node_AmazonEKSWorkerNodePolicy" {
-  role       = aws_iam_role.eks_node_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-}
-
 
 resource "aws_eks_cluster" "main" {
   name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = [aws_subnet.private_a_subnet_id, aws_subnet.private_b_subnet_id]
+    subnet_ids = [var.private_a_subnet_id, var.private_b_subnet_id]
     endpoint_public_access = true
   }
 
@@ -92,4 +52,38 @@ resource "aws_security_group" "eks_mongo_access" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_iam_role" "fargate_pod_execution_role" {
+  name = "fargatePodExecutionRole"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = { Service = "eks-fargate-pods.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "fargate_pod_policy" {
+  role       = aws_iam_role.fargate_pod_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
+}
+
+resource "aws_eks_fargate_profile" "default" {
+  cluster_name           = aws_eks_cluster.main.name
+  fargate_profile_name   = "default"
+  pod_execution_role_arn = aws_iam_role.fargate_pod_execution_role.arn
+  subnet_ids             = [var.private_a_subnet_id, var.private_b_subnet_id]
+
+  selector {
+    namespace = "default"
+  }
+
+  depends_on = [
+    aws_eks_cluster.main,
+    aws_iam_role_policy_attachment.fargate_pod_policy
+  ]
 }

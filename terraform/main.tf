@@ -27,9 +27,9 @@ module "ubuntu_vm" {
 }
 
 module "k8s_cluster" {
-  source  = "./k8s_cluster"
-  eks_cluster_name = var.eks_cluster_name
-  vpc_id           = module.base.vpc_id
+  source              = "./k8s_cluster"
+  eks_cluster_name    = var.eks_cluster_name
+  vpc_id              = module.base.vpc_id
   private_a_subnet_id = module.base.private_a_subnet_id
   private_b_subnet_id = module.base.private_b_subnet_id
 }
