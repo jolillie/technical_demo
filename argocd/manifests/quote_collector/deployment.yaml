@@ -13,6 +13,7 @@ spec:
       labels:
         app: quote-collector
     spec:
+      serviceAccountName: quote-collector-sa
       containers:
         - name: app
           image: ghcr.io/jolillie/quote-collector:latest
