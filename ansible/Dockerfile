@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN ansible-galaxy install -r requirements.yml
+
 RUN pip install pymongo
 
 WORKDIR /ansible
