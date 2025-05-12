@@ -51,9 +51,13 @@ jobs:
           aws secretsmanager create-secret --name "$SECRET_NAME" --secret-string "$PASSWORD"
         fi
 
+    - name: Create Quote-Collector Namespace
+      run: |
+        kubectl create namespace quote-demo || true
+
     - name: Create MongoDB Secret
       run: |
-        kubectl create secret generic mongo-credentials \
+        kubectl create secret generic mongo-credentials -n quote-demo \
           --from-literal=MONGO_URI="${{ secrets.MONGO_URI }}" \
           --dry-run=client -o yaml | kubectl apply -f -
 

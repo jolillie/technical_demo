@@ -21,6 +21,7 @@ Jon Lillie
 ## Notes
 
 Older AMI image lookup: [Ubuntu AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/)
+[1Password CLI](https://developer.1password.com/docs/cli/shell-plugins/aws/)
 
 ```bash
 docker build -t ansible-apt:2.10 .
