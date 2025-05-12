@@ -1,6 +1,6 @@
 ---
 - name: Setup Database VM with MongoDB 4.4
-  hosts: all
+  hosts: aws_db_server
   gather_facts: true
   become: true
   vars:

@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-apt \
     python3-pip \
     python3-setuptools \
-    ansible \
     sshpass \
     git \
     openssh-client \
@@ -17,11 +16,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install pymongo
+RUN pip install ansible==2.9.27
 
 WORKDIR /ansible
 
 COPY requirements.yml /ansible/requirements.yml
 COPY ansible.cfg /ansible/ansible.cfg
+COPY inventory.yml /ansible/inventory.yml
+COPY setup_db_vm.yml /ansible/setup_db_vm.yml
 RUN ansible-galaxy collection install -r requirements.yml --force
 
 CMD ["bash"]

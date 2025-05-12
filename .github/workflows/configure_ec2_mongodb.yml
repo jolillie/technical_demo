@@ -29,9 +29,7 @@ jobs:
           -v ~/.ssh:/root/.ssh:ro \
           -w /workspace \
           custom-ansible \
-          ansible-playbook -i "${{ secrets.EC2_HOST }}," ansible/setup_db_vm.yml \
-            --private-key /root/.ssh/id_rsa \
-            -u ubuntu
+          ansible-playbook -i inventory.yml ansible/setup_db_vm.yml \
             -e "mongodb_main_password=${{ secrets.MONGODB_ADMIN_PASSWORD }}" \
             -e "mongodb_main_user=${{ secrets.MONGODB_ADMIN_USER }}" \
             -vv
