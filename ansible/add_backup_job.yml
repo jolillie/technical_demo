@@ -1,35 +1,35 @@
 ---
-- name: Deploy MongoDB backup script
-  hosts: mongo_servers
-  become: yes
-  vars:
-    backup_script_path: /usr/local/bin/mongo_backup.sh
-    cron_job: "0 * * * * root /usr/local/bin/mongo_backup.sh"
-
+- name: Setup MongoDB Backup Script and Cron
+  hosts: aws_db_server
+  become: true
   tasks:
-    - name: Install required packages
-      package:
-        name:
-          - awscli
-          - mongodb-clients
-        state: present
 
-    - name: Upload the backup script
-      copy:
-        src: mongo_backup.sh
-        dest: "{{ backup_script_path }}"
-        mode: '0755'
-
-    - name: Ensure backup log directory exists
-      file:
-        path: /var/log
+    - name: Ensure backup and log directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
         state: directory
         mode: '0755'
+      loop:
+        - /usr/local/bin
+        - /var/log
 
-    - name: Set up cron job
-      cron:
-        name: "Hourly MongoDB backup"
-        minute: "0"
-        hour: "*"
+    - name: Copy MongoDB backup script
+      ansible.builtin.copy:
+        src: scripts/mongo_backup.sh
+        dest: /usr/local/bin/mongo_backup.sh
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Ensure AWS CLI is installed
+      ansible.builtin.package:
+        name: awscli
+        state: present
+
+    - name: Add cron job to run backup every 6 hours
+      ansible.builtin.cron:
+        name: "MongoDB Backup to S3"
         user: root
-        job: "{{ backup_script_path }}"
+        job: "/usr/local/bin/mongo_backup.sh"
+        minute: "0"
+        hour: "*/6"

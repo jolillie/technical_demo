@@ -45,9 +45,29 @@ Forgot to run galaxy command in Ansible docker container.
 
 1. Update
 
+## Mongod Restore Process
+
+on-demand backup
+
+```bash
+sudo mongodump --config /etc/mongodump/mongodump.conf --archive=/tmp/mongo_backup.gz --gzip
+```
+
+Restore backup
+
+```bash
+sudo mongorestore --archive=/tmp/mongo_backup.gz --gzip \
+  --nsFrom='*.*' \
+  --nsTo='tempcheck.*.*' \
+  --username "username" \
+  --password "password" \
+  --authenticationDatabase admin \
+  --nsExclude='*.system.*'
+```
+
 ## Todo List
 
-- [ ] Kubernetes Application Exercise
+- [x] Kubernetes Application Exercise
   - [x] Database
     - [x] Outdated Linux VM (Ubuntu 18.04)
     - [x] On top of VM, installed outdated DB Server (MongoDB 4.4)
@@ -59,14 +79,14 @@ Forgot to run galaxy command in Ansible docker container.
   - [x] Highly Privileged DB VM
     - [x] Config VM in a way that it is granted overly permissive CSP permissions
   - [ ] Object Storage
-    - [ ] Create a cloud object storage resource
+    - [x] Create a cloud object storage resource
     - [ ] Store DB Backups
     - [x] Modify permissions on object store to allow public read access to the backups
     - [x] Modify permissions on object store to allow public listing of contents
     - [ ] Validate backups are accessible via external URL
   - [ ] DB Backups
     - [ ] Create automation to regularly backup db(s) to the created bucket / object store
-  - [ ] Kubernetes Cluster
+  - [X] Kubernetes Cluster
     - [x] Deploy K8s cluster
   - [x] Containerized Web Application
     - [x] Deploy containerized web app onto K8s cluster
@@ -74,8 +94,8 @@ Forgot to run galaxy command in Ansible docker container.
     - [x] Confirm container image includes a file named "wizexercise.txt" with content
   - [x] Public Access
     - [x] Set up the containerized web app to be reachable from the public internet
-  - [ ] Container Admin Configuration
-    - [ ] configure the web app container to run with cluster-admin privileges
+  - [x] Container Admin Configuration
+    - [x] configure the web app container to run with cluster-admin privileges
 - [X] DevOps Exercise
   - [X] VCS/SCM
     - [X] Push code to VCS/SCM
@@ -94,9 +114,9 @@ Forgot to run galaxy command in Ansible docker container.
       - [ ] Preventative
       - [ ] Detective
       - [ ] Responsive
-  - [ ] Control Plane Audit Logging
-    - [ ] Setup control plane audit logging for AWS
-    - [ ] Show a sample event of the activity produced during the tech tasks
+  - [x] Control Plane Audit Logging
+    - [x] Setup control plane audit logging for AWS
+    - [x] Show a sample event of the activity produced during the tech tasks
   - [ ] Optional: Setup Cloud Native detective controls for your CSP
   - [ ] Optional: Run a simulated attack or simulated behavior to showcase the efficacy of your preventative and detective controls
 - [ ] Demo and Presentation
