@@ -20,7 +20,7 @@ jobs:
 
     - name: Build custom Ansible Docker image
       run: |
-        docker build -t custom-ansible ansible/Dockerfile
+        docker build -t custom-ansible ansible/.
 
     - name: Run Ansible inside Docker container
       run: |
