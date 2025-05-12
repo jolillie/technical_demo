@@ -61,6 +61,11 @@
         name: pymongo
         executable: pip3
 
+    - name: Ensure mongosh is installed
+      ansible.builtin.apt:
+        name: mongosh
+        state: present
+
     - name: Create main MongoDB user (before enabling auth)
       community.mongodb.mongodb_user:
         login_host: localhost
@@ -81,6 +86,15 @@
             authorization: "enabled"
         marker: "# {mark} ANSIBLE MANAGED BLOCK - AUTH"
 
+    - name: Ensure MongoDB is listening on all interfaces
+      ansible.builtin.blockinfile:
+        path: /etc/mongod.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - net"
+        block: |
+          net:
+            port: 27017
+            bindIp: 0.0.0.0
+
     - name: Restart MongoDB to apply authentication config
       ansible.builtin.systemd:
         name: mongod
@@ -88,11 +102,50 @@
 
     - name: Test MongoDB authentication using admin user
       community.mongodb.mongodb_info:
-        login_user: "{{ mongodb_admin_user }}"
-        login_password: "{{ mongodb_admin_password }}"
+        login_user: "{{ mongodb_main_user }}"
+        login_password: "{{ mongodb_main_password }}"
         login_database: admin
       register: mongo_info
 
     - name: Show MongoDB server info (authentication succeeded)
       ansible.builtin.debug:
         var: mongo_info
+
+    - name: Ensure a document exists in the quote DB to create it
+      community.mongodb.mongodb_shell:
+        login_user: "{{ mongo_main_user }}"
+        login_password: "{{ mongo_main_pass }}"
+        login_database: admin
+        db: quote
+        eval: 'db.init.insertOne({init: true})'
+        ssl: false
+
+    - name: Create quote user in 'quote' database
+      community.mongodb.mongodb_user:
+        login_user: "{{ mongo_main_user }}"
+        login_password: "{{ mongo_main_pass }}"
+        login_database: admin
+        database: quote
+        name: "{{ mongo_quote_user }}"
+        password: "{{ mongo_main_pass }}"
+        roles:
+          - role: readWrite
+            db: quote
+
+    - name: Test quote_admin can insert a document into quote DB
+      community.mongodb.mongodb_shell:
+        login_user: "{{ mongo_quote_user }}"
+        login_password: "{{ mongo_quote_pass }}"
+        login_database: quote
+        db: quote
+        eval: 'db.test_auth.insertOne({success: true})'
+        ssl: false
+
+    - name: Test quote_admin can read from quote DB
+      community.mongodb.mongodb_shell:
+        login_user: "{{ mongo_quote_user }}"
+        login_password: "{{ mongo_quote_pass }}"
+        login_database: quote
+        db: quote
+        eval: 'db.test_auth.findOne()'
+        ssl: false
