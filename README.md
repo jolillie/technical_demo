@@ -48,15 +48,15 @@ Forgot to run galaxy command in Ansible docker container.
 ## Todo List
 
 - [ ] Kubernetes Application Exercise
-  - [ ] Database
+  - [x] Database
     - [x] Outdated Linux VM (Ubuntu 18.04)
     - [x] On top of VM, installed outdated DB Server (MongoDB 4.4)
     - [x] Configure VM to allow SSH connections from internet
-    - [ ] Configure DB and/or network to only allow connections to the DB from Apps in K8s Cluster
-  - [ ] Database Authentication
+    - [x] Configure DB and/or network to only allow connections to the DB from Apps in K8s Cluster
+  - [x] Database Authentication
     - [X] Ensure DB is configured for local auth
     - [x] Ability to construct connection string
-  - [ ] Highly Privileged DB VM
+  - [x] Highly Privileged DB VM
     - [x] Config VM in a way that it is granted overly permissive CSP permissions
   - [ ] Object Storage
     - [ ] Create a cloud object storage resource
@@ -67,13 +67,13 @@ Forgot to run galaxy command in Ansible docker container.
   - [ ] DB Backups
     - [ ] Create automation to regularly backup db(s) to the created bucket / object store
   - [ ] Kubernetes Cluster
-    - [ ] Deploy K8s cluster
-  - [ ] Containerized Web Application
-    - [ ] Deploy containerized web app onto K8s cluster
-    - [ ] Ensure container employs DB auth
-    - [ ] Confirm container image includes a file named "wizexercise.txt" with content
-  - [ ] Public Access
-    - [ ] Set up the containerized web app to be reachable from the public internet
+    - [x] Deploy K8s cluster
+  - [x] Containerized Web Application
+    - [x] Deploy containerized web app onto K8s cluster
+    - [x] Ensure container employs DB auth
+    - [x] Confirm container image includes a file named "wizexercise.txt" with content
+  - [x] Public Access
+    - [x] Set up the containerized web app to be reachable from the public internet
   - [ ] Container Admin Configuration
     - [ ] configure the web app container to run with cluster-admin privileges
 - [X] DevOps Exercise
