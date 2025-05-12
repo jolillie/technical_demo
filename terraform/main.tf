@@ -12,7 +12,8 @@ provider "aws" {
 }
 
 module "base" {
-  source = "./base"
+  source           = "./base"
+  eks_cluster_name = var.eks_cluster_name
 }
 
 module "ubuntu_vm" {

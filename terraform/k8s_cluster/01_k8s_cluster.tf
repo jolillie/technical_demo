@@ -87,3 +87,21 @@ resource "aws_eks_fargate_profile" "default" {
     aws_iam_role_policy_attachment.fargate_pod_policy
   ]
 }
+
+resource "aws_eks_fargate_profile" "kube_system" {
+  cluster_name           = aws_eks_cluster.main.name
+  fargate_profile_name   = "kube-system"
+  pod_execution_role_arn = aws_iam_role.fargate_pod_execution_role.arn
+  subnet_ids             = [var.private_a_subnet_id, var.private_b_subnet_id]  # Adjust to your actual variable
+
+  selector {
+    namespace = "kube-system"
+    labels = {
+      "k8s-app" = "kube-dns"
+    }
+  }
+
+  tags = {
+    Name = "kube-system-fargate-profile"
+  }
+}

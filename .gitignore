@@ -27,6 +27,8 @@ __test__*.py
 *.tfstate
 *.tfstate.*
 
+terraform.zip
+
 # Crash log files
 crash.log
 crash.*.log
