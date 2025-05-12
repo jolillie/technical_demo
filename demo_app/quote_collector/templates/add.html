@@ -2,16 +2,84 @@
 <html>
 <head>
   <title>Add a Quote</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9f9f9;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+    textarea, input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    select {
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007BFF;
+    }
+  </style>
 </head>
 <body>
   <h1>Add a Quote</h1>
   <form method="POST">
-    <label>Quote:</label><br>
-    <textarea name="quote" required></textarea><br>
-    <label>Author:</label><br>
-    <input type="text" name="author" required><br><br>
+    <label for="quote">Quote:</label>
+    <textarea name="quote" id="quote" required rows="4"></textarea>
+
+    <label for="author">Author:</label>
+    <input type="text" name="author" id="author" required>
+
+    <label for="category">Category:</label>
+    <select name="category" id="category" required>
+      <option value="">--Select a Category--</option>
+      <option>Inspiration</option>
+      <option>Humor</option>
+      <option>Wisdom</option>
+      <option>Life</option>
+      <option>Other</option>
+    </select>
+
     <button type="submit">Submit</button>
   </form>
-  <a href="/">Back to Quotes</a>
+  <a class="back-link" href="/">⬅ Back to Quotes</a>
 </body>
 </html>

@@ -2,17 +2,77 @@
 <html>
 <head>
   <title>Quote Collector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0 20px;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: #333;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .quote-card {
+      background-color: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    blockquote {
+      font-style: italic;
+      margin: 0;
+      color: #555;
+    }
+    .author {
+      text-align: right;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+    .category {
+      font-size: 14px;
+      color: #888;
+      margin-top: 5px;
+    }
+    .add-link {
+      display: block;
+      text-align: center;
+      margin: 30px auto;
+      font-size: 18px;
+      color: #007BFF;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
   <h1>Recent Quotes</h1>
-  <a href="/add">Add New Quote</a>
-  <ul>
-    {% for q in quotes %}
-      <li>
-        <blockquote>"{{ q.quote }}"</blockquote>
-        — {{ q.author }}
-      </li>
-    {% endfor %}
-  </ul>
+  <a class="add-link" href="/add">➕ Add a New Quote</a>
+
+  {% if random_quote %}
+    <div class="quote-card" style="border-left: 5px solid #28a745;">
+      <h3 style="margin-top: 0; color: #28a745;">Quote of the Day</h3>
+      <blockquote>“{{ random_quote.quote }}”</blockquote>
+      <div class="author">— {{ random_quote.author }}</div>
+      {% if random_quote.category %}
+        <div class="category">Category: {{ random_quote.category }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% for q in quotes %}
+    <div class="quote-card">
+      <blockquote>“{{ q.quote }}”</blockquote>
+      <div class="author">— {{ q.author }}</div>
+      {% if q.category %}
+        <div class="category">Category: {{ q.category }}</div>
+      {% endif %}
+    </div>
+  {% endfor %}
 </body>
 </html>

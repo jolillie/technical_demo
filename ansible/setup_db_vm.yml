@@ -111,41 +111,14 @@
       ansible.builtin.debug:
         var: mongo_info
 
-    - name: Ensure a document exists in the quote DB to create it
-      community.mongodb.mongodb_shell:
-        login_user: "{{ mongo_main_user }}"
-        login_password: "{{ mongo_main_pass }}"
-        login_database: admin
-        db: quote
-        eval: 'db.init.insertOne({init: true})'
-        ssl: false
-
-    - name: Create quote user in 'quote' database
-      community.mongodb.mongodb_user:
-        login_user: "{{ mongo_main_user }}"
-        login_password: "{{ mongo_main_pass }}"
-        login_database: admin
-        database: quote
-        name: "{{ mongo_quote_user }}"
-        password: "{{ mongo_main_pass }}"
-        roles:
-          - role: readWrite
-            db: quote
-
-    - name: Test quote_admin can insert a document into quote DB
-      community.mongodb.mongodb_shell:
-        login_user: "{{ mongo_quote_user }}"
-        login_password: "{{ mongo_quote_pass }}"
-        login_database: quote
-        db: quote
-        eval: 'db.test_auth.insertOne({success: true})'
-        ssl: false
-
-    - name: Test quote_admin can read from quote DB
-      community.mongodb.mongodb_shell:
-        login_user: "{{ mongo_quote_user }}"
-        login_password: "{{ mongo_quote_pass }}"
-        login_database: quote
-        db: quote
-        eval: 'db.test_auth.findOne()'
-        ssl: false
+- name: Create quote user in 'quotes' database
+  community.mongodb.mongodb_user:
+    login_user: "{{ mongo_main_user }}"
+    login_password: "{{ mongo_main_pass }}"
+    login_database: admin
+    database: quote_db
+    name: "{{ mongo_quote_user }}"
+    password: "{{ mongo_quote_pass }}"
+    roles:
+      - role: readWrite
+        db: quote_db
