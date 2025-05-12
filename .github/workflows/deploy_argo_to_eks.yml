@@ -7,6 +7,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
@@ -16,11 +20,11 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Update kubeconfig
       run: |
-        aws eks update-kubeconfig --region $AWS_REGION --name <your-cluster-name>
+        aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
     - name: Create ArgoCD Namespace
       run: |
