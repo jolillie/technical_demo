@@ -37,7 +37,7 @@ Finding the right combination of Ubuntu Version and MongoDB
 Needed an older version of ansible to work with the older versions of Ubuntu
 Terraform CLI vs Version control for running TF applies
 Terraform Blast Radiuses and being able to blow up specific parts of the environment
-
+Fargate takes a lot longer to get pods and service up and running.
 
 ## Mongo Server Setup
 

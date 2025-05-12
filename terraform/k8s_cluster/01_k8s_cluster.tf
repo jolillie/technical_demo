@@ -110,13 +110,10 @@ resource "aws_eks_fargate_profile" "argocd" {
   cluster_name           = aws_eks_cluster.main.name
   fargate_profile_name   = "argocd"
   pod_execution_role_arn = aws_iam_role.fargate_pod_execution_role.arn
-  subnet_ids             = [var.private_a_subnet_id, var.private_b_subnet_id]  # Adjust to your actual variable
+  subnet_ids             = [var.private_a_subnet_id, var.private_b_subnet_id]
 
   selector {
     namespace = "argocd"
-    labels = {
-      "k8s-app" = "argocd"
-    }
   }
 
   tags = {
