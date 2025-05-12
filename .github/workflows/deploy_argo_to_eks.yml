@@ -50,3 +50,7 @@ jobs:
           echo "Creating new secret..."
           aws secretsmanager create-secret --name "$SECRET_NAME" --secret-string "$PASSWORD"
         fi
+
+    - name: Deploy App of Apps
+      run: |
+        kubectl apply -f argocd/app_of_apps/app_of_apps.yaml
