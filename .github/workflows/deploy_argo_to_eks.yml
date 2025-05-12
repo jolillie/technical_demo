@@ -61,6 +61,11 @@ jobs:
           --from-literal=MONGO_URI="${{ secrets.MONGO_URI }}" \
           --dry-run=client -o yaml | kubectl apply -f -
 
+    - name: Check MongoDB Secret was created
+      run: |
+        kubectl get secret -A
+
+
     - name: Deploy App of Apps
       run: |
         kubectl apply -f argocd/app_of_apps/app_of_apps.yaml
