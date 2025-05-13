@@ -32,4 +32,4 @@
         user: root
         job: "/usr/local/bin/mongo_backup.sh"
         minute: "0"
-        hour: "*/6"
+        hour: "*/3"

@@ -78,14 +78,14 @@ sudo mongorestore --archive=/tmp/mongo_backup.gz --gzip \
     - [x] Ability to construct connection string
   - [x] Highly Privileged DB VM
     - [x] Config VM in a way that it is granted overly permissive CSP permissions
-  - [ ] Object Storage
+  - [x] Object Storage
     - [x] Create a cloud object storage resource
-    - [ ] Store DB Backups
+    - [x] Store DB Backups
     - [x] Modify permissions on object store to allow public read access to the backups
     - [x] Modify permissions on object store to allow public listing of contents
     - [ ] Validate backups are accessible via external URL
-  - [ ] DB Backups
-    - [ ] Create automation to regularly backup db(s) to the created bucket / object store
+  - [x] DB Backups
+    - [x] Create automation to regularly backup db(s) to the created bucket / object store
   - [X] Kubernetes Cluster
     - [x] Deploy K8s cluster
   - [x] Containerized Web Application
@@ -125,3 +125,11 @@ sudo mongorestore --archive=/tmp/mongo_backup.gz --gzip \
   - [ ] Efficient, Repeatable, approaches to build out
   - [ ] Documented Pain points
   - [ ] Clear and intuitive
+
+## Demo List
+
+- [ ] Github Actions
+- [ ] ArgoCD
+  - [ ] Change to the Web App Front End
+- [ ] Terraform Cloud Runs
+- [ ]
