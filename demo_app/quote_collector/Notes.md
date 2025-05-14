@@ -22,3 +22,10 @@
 — Marcus Aurelius
 10. “How long are you going to wait before you demand the best for yourself?”
 — Epictetus
+
+## Versions
+
+Background Colors
+Baby Blue: #89cff0
+White-ish: #f4f4f9
+Light Green: #CDEBC5
