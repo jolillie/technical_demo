@@ -1,0 +1,45 @@
+name: Security Scans
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run Trivy
+      id: trivy
+      run: |
+        trivy config . > trivy_results.txt || true
+
+    - name: Run Checkov
+      id: checkov
+      run: |
+        pip install checkov
+        checkov -d . --quiet > checkov_results.txt || true
+
+    - name: Send report to Discord
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        echo "Sending results to Discord..."
+
+        truncate -s 1900 trivy_results.txt  # Discord limit is 2000 chars
+        truncate -s 1900 checkov_results.txt
+
+        trivy_summary=$(cat trivy_results.txt)
+        checkov_summary=$(cat checkov_results.txt)
+
+        run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+        message="**🔍 Trivy Results:**\n\`\`\`\n$trivy_summary\n\`\`\`\n**🛡 Checkov Results:**\n\`\`\`\n$checkov_summary\n\`\`\`\n**Run URL:** $run_url"
+
+        curl -H "Content-Type: application/json" \
+             -X POST \
+             -d "{\"content\": \"$message\"}" \
+             $DISCORD_WEBHOOK_URL
