@@ -1,0 +1,15 @@
+falco:
+  grpc:
+    enabled: true
+    outputs:
+      enabled: true
+  jsonOutput: true
+  logLevel: info
+
+falcosidekick:
+  enabled: true
+  config:
+    discord:
+      webhookurl: "https://discord.com/api/webhooks/1372337055501127690/f2HiSRzPFLDt9kqwvnlMejH6848dRKewCHFXFpSft3PoxP7WFpDGR24opkmj03Ou6C0G"
+  webhook:
+    enabled: true
