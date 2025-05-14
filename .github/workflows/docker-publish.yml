@@ -6,6 +6,11 @@ on:
   #     - main
   # pull_request:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of the image'
+        required: false
+        default: 'latest'
 
 jobs:
   build-and-push:
@@ -31,4 +36,4 @@ jobs:
           context: ./demo_app/quote_collector
           file: ./demo_app/quote_collector/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/quote-collector:latest
+          tags: ghcr.io/${{ github.repository_owner }}/quote-collector:${{ github.event.inputs.version }}
