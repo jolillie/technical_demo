@@ -6,12 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/jolillie/technical_demo.git
-    targetRevision: main
-    path: argocd/manifests/falco
-    helm:
-      valueFiles:
-        - helm-values.yaml
+    repoURL: https://github.com/falcosecurity/falco
+    targetRevision: master
+    path: k8s
   destination:
     server: https://kubernetes.default.svc
     namespace: falco
@@ -19,3 +16,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
