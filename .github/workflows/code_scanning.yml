@@ -7,59 +7,82 @@ on:
   pull_request:
 
 jobs:
-  security:
+  tfsec:
+    name: Run tfsec sarif report
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Clone repo
+        uses: actions/checkout@v4
 
-    - name: Run Trivy vulnerability scanner in IaC mode
-      uses: aquasecurity/trivy-action@0.28.0
-      with:
-        scan-type: 'config'
-        hide-progress: true
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        exit-code: '0'
-        severity: 'CRITICAL,HIGH'
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-sarif-action@21ded20e8ca120cd9d3d6ab04ef746477542a608
+        with:
+          sarif_file: tfsec.sarif
 
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: 'trivy-results.sarif'
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: tfsec.sarif
 
-    - name: Run Checkov
-      id: checkov
-      run: |
-        pip install checkov
-        checkov -d . --quiet > checkov_results.txt || true
+#   security:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
 
-    - name: Send report to Discord
-      env:
-        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      run: |
-        echo "Sending results to Discord..."
+#     - name: Run Trivy vulnerability scanner in IaC mode
+#       uses: aquasecurity/trivy-action@0.28.0
+#       with:
+#         scan-type: 'config'
+#         hide-progress: true
+#         format: 'sarif'
+#         output: 'trivy-results.sarif'
+#         exit-code: '0'
+#         severity: 'CRITICAL,HIGH'
 
-        # Truncate to keep within Discord's 2000 character limit per message
-        trivy_summary=$(head -c 1800 trivy_results.txt)
-        checkov_summary=$(head -c 1800 checkov_results.txt)
+#     - name: Upload Trivy scan results to GitHub Security tab
+#       uses: github/codeql-action/upload-sarif@v3
+#       with:
+#         sarif_file: 'trivy-results.sarif'
 
-        run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+#     - name: Run Checkov
+#       id: checkov
+#       run: |
+#         pip install checkov
+#         checkov -d . --quiet > checkov_results.txt || true
 
-        # Escape strings for JSON using jq’s @json
-        trivy_json=$(jq -Rn --arg str "$trivy_summary" '$str | @json')
-        checkov_json=$(jq -Rn --arg str "$checkov_summary" '$str | @json')
-        url_json=$(jq -Rn --arg str "$run_url" '$str | @json')
+#     - name: Send report to Discord
+#       env:
+#         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+#       run: |
+#         echo "Sending results to Discord..."
 
-        # Strip surrounding quotes from JSON strings (optional, for clean formatting)
-        trivy_clean=${trivy_json:1:-1}
-        checkov_clean=${checkov_json:1:-1}
-        url_clean=${url_json:1:-1}
+#         # Truncate to keep within Discord's 2000 character limit per message
+#         trivy_summary=$(head -c 1800 trivy_results.txt)
+#         checkov_summary=$(head -c 1800 checkov_results.txt)
 
-        message="**🔍 Trivy Results:**\n\`\`\`\n$trivy_clean\n\`\`\`\n**🛡 Checkov Results:**\n\`\`\`\n$checkov_clean\n\`\`\`\n🔗 [View Full Run]($url_clean)"
+#         run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-        jq -n --arg content "$message" '{content: $content}' \
-          | curl -H "Content-Type: application/json" \
-                 -X POST \
-                 -d @- \
-                 "$DISCORD_WEBHOOK_URL"
+#         # Escape strings for JSON using jq’s @json
+#         trivy_json=$(jq -Rn --arg str "$trivy_summary" '$str | @json')
+#         checkov_json=$(jq -Rn --arg str "$checkov_summary" '$str | @json')
+#         url_json=$(jq -Rn --arg str "$run_url" '$str | @json')
+
+#         # Strip surrounding quotes from JSON strings (optional, for clean formatting)
+#         trivy_clean=${trivy_json:1:-1}
+#         checkov_clean=${checkov_json:1:-1}
+#         url_clean=${url_json:1:-1}
+
+#         message="**🔍 Trivy Results:**\n\`\`\`\n$trivy_clean\n\`\`\`\n**🛡 Checkov Results:**\n\`\`\`\n$checkov_clean\n\`\`\`\n🔗 [View Full Run]($url_clean)"
+
+#         jq -n --arg content "$message" '{content: $content}' \
+#           | curl -H "Content-Type: application/json" \
+#                  -X POST \
+#                  -d @- \
+#                  "$DISCORD_WEBHOOK_URL"
