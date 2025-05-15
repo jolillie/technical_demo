@@ -133,3 +133,20 @@ sudo mongorestore --archive=/tmp/mongo_backup.gz --gzip \
   - [ ] Change to the Web App Front End
 - [ ] Terraform Cloud Runs
 - [ ] kubectl delete pod -n falco -l app=falco
+- [ ] Grafana
+- [ ] Falco
+- [ ] Cloud Trail
+
+
+
+### Break and fix falco:
+
+```bash
+helm upgrade falco falcosecurity/falco -n falco \
+  --set falco.jsonOutput=false \
+  --set falco.fileOutput.enabled=false \
+  --set falco.stdoutOutput.enabled=false \
+  --set falco.syslogOutput.enabled=false \
+  --set falco.grpc.enabled=false \
+  --set falco.grpcOutput.enabled=false
+```
