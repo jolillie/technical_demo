@@ -1,4 +1,4 @@
-name: Build & Push to GHCR
+name: Falco Replicas
 
 on:
   # push:
