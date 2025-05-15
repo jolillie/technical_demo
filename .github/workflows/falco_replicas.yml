@@ -1,0 +1,37 @@
+name: Build & Push to GHCR
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  workflow_dispatch:
+    inputs:
+      replicas:
+        description: 'Number of replicas'
+        required: false
+        default: '1'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region $AWS_REGION --name demo-cluster
+
+    - name: Change Falco Replicas
+      run: |
+        kubectl scale deployment falco --replicas=${{ github.event.inputs.replicas }} -n falco || true
+
