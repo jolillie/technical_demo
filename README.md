@@ -132,4 +132,4 @@ sudo mongorestore --archive=/tmp/mongo_backup.gz --gzip \
 - [ ] ArgoCD
   - [ ] Change to the Web App Front End
 - [ ] Terraform Cloud Runs
-- [ ]
+- [ ] kubectl delete pod -n falco -l app=falco

@@ -1,0 +1,9 @@
+- rule: Detect kubectl get usage
+  desc: Detect usage of 'kubectl get' command
+  condition: >
+    evt.type = execve and
+    proc.name = kubectl and
+    (proc.cmdline contains "get")
+  output: "kubectl get command executed (user=%user.name proc=%proc.cmdline)"
+  priority: WARNING
+  tags: [k8s, kubectl, monitoring]

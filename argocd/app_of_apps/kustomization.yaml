@@ -2,4 +2,4 @@ resources:
   - tetris/tetris_deployment.yaml
   - quote_collector/quote_collector_deployment.yaml
   # - prometheus/prometheus_deployment.yaml
-  - falco/falco_deployment.yaml
+  # - falco/falco_deployment.yaml
