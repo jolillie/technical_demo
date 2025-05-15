@@ -16,7 +16,7 @@ spec:
       serviceAccountName: quote-collector-sa
       containers:
         - name: app
-          image: ghcr.io/jolillie/quote-collector:latest
+          image: ghcr.io/jolillie/quote-collector:peter
           ports:
             - containerPort: 5000
           env:
